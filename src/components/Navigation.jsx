@@ -8,7 +8,7 @@ const Navigation = () => {
     const links = [
         { name: 'Services', href: '#services' },
         { name: 'Process', href: '#process' },
-        { name: 'Work', href: '#work' },
+        { name: 'Testimonials', href: '#testimonials' },
     ];
 
     const toggleMenu = () => setIsOpen(!isOpen);

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
-
 const Contact = () => {
     const [status, setStatus] = useState('');
 
@@ -9,15 +7,26 @@ const Contact = () => {
         e.preventDefault();
         setStatus('Sending...');
 
-        // Usually you need specific service_id, template_id, target_form/ref and public_key
-        // For now we simulate or use dummy info.
-        emailjs.sendForm('default_service', 'template_id', e.target, 'public_key')
-            .then(() => {
-                setStatus('Sent successfully! We will contact you soon.');
-                e.target.reset();
-            }, (error) => {
+        fetch('https://formsubmit.co/ajax/devdecks.team@gmail.com', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: new FormData(e.target)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success === "true" || data.success === true) {
+                    setStatus('Sent successfully! We will contact you soon.');
+                    e.target.reset();
+                } else {
+                    setStatus('Failed to send. Please try again.');
+                    console.error(data);
+                }
+            })
+            .catch(error => {
                 setStatus('Failed to send. Please try again.');
-                console.error(error.text);
+                console.error(error);
             });
     };
 
