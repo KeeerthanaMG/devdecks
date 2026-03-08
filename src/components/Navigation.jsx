@@ -49,7 +49,7 @@ const Navigation = () => {
     const links = [
         { name: 'Services', href: '#services' },
         { name: 'Process', href: '#process' },
-        { name: 'Testimonials', href: '#testimonials' },
+        { name: 'Selected Work', href: '#work' },
     ];
 
     const toggleMenu = () => setIsOpen(!isOpen);

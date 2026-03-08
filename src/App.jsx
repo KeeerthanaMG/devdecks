@@ -4,7 +4,8 @@ import Hero from './components/Hero';
 import Credibility from './components/Credibility';
 import Services from './components/Services';
 import Process from './components/Process';
-import Testimonials from './components/Testimonials';
+import WorkPreview from './components/WorkPreview';
+
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -17,7 +18,8 @@ function App() {
         <Credibility />
         <Services />
         <Process />
-        <Testimonials />
+        <WorkPreview />
+
         <Contact />
       </main>
       <Footer />

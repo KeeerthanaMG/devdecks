@@ -22,11 +22,17 @@ const Hero = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.04, // Faster stagger for individual letters
+                staggerChildren: 0.055,
                 delayChildren: 0.1
             }
         }
     };
+
+    // Delay offsets per line group so they build sequentially
+    // "Build Digital"  = 13 chars → ends at 0.1 + 13×0.055 ≈ 0.82s
+    // "Products That" starts at 0.85s, 13 chars → ends at 0.85 + 13×0.055 ≈ 1.57s
+    // "Actually Work." starts at 1.6s
+    const LINE_DELAYS = { line1: 0, line2: 0.85, line3: 1.6 };
 
     // Each letter drops in like a heavy block
     const blockVariants = {
@@ -46,8 +52,22 @@ const Hero = () => {
     };
 
     // Helper function to split text into animated characters
-    const AnimatedText = ({ text, className = "" }) => (
-        <span className={`inline-block ${className}`}>
+    // Each AnimatedText is a motion.span so it participates in parent stagger
+    // and cascades its own letters via staggerChildren + delayChildren offset
+    const AnimatedText = ({ text, className = "", delay = 0 }) => (
+        <motion.span
+            className={`inline-block ${className}`}
+            variants={{
+                hidden: { opacity: 1 },
+                visible: {
+                    opacity: 1,
+                    transition: {
+                        staggerChildren: 0.055,
+                        delayChildren: delay
+                    }
+                }
+            }}
+        >
             {text.split("").map((char, index) => (
                 <motion.span
                     key={index}
@@ -57,7 +77,7 @@ const Hero = () => {
                     {char === " " ? "\u00A0" : char}
                 </motion.span>
             ))}
-        </span>
+        </motion.span>
     );
 
     return (
@@ -75,15 +95,13 @@ const Hero = () => {
                         animate="visible"
                         className="text-5xl md:text-7xl lg:text-8xl font-display font-black leading-tight uppercase mb-8 flex flex-wrap justify-center gap-x-4 gap-y-2 perspective-1000"
                     >
-                        <AnimatedText text="Build Digital" />
+                        <AnimatedText text="Build Digital" delay={LINE_DELAYS.line1} />
                         <div className="w-full h-0"></div>
-                        <AnimatedText text="Products That" />
-                        <motion.div
-                            variants={blockVariants}
-                            className="bg-electric-orange text-black px-4 inline-block mt-2 transform -rotate-2 border-4 border-black shadow-neo-sm overflow-hidden"
-                        >
-                            <AnimatedText text="Actually Work." />
-                        </motion.div>
+                        <AnimatedText text="Products That" delay={LINE_DELAYS.line2} />
+                        <div className="w-full h-0"></div>
+                        <div className="bg-electric-orange text-black px-4 inline-block mt-2 transform -rotate-2 border-4 border-black shadow-neo-sm overflow-hidden">
+                            <AnimatedText text="Actually Work." delay={LINE_DELAYS.line3} />
+                        </div>
                     </motion.div>
 
                     <motion.p
