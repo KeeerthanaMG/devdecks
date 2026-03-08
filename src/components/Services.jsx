@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const Services = () => {
     const categories = [
@@ -42,6 +43,25 @@ const Services = () => {
         }
     ];
 
+    const faqs = [
+        { q: "How long does a website take to build?", a: "Most business websites take 2-4 weeks. Complex web applications can take 2-3 months." },
+        { q: "Do you provide hosting and maintenance?", a: "Yes, we offer ongoing support, maintenance, and reliable hosting packages." },
+        { q: "What is your pricing structure?", a: "We mainly work on fixed-price projects after scoping out your exact needs. Start a conversation with us to get a quote." }
+    ];
+
+    const listVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, x: -20 },
+        visible: { opacity: 1, x: 0 }
+    };
+
     return (
         <section id="services" className="py-24 bg-off-white border-b-4 border-black">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +76,7 @@ const Services = () => {
                     </motion.h2>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-24">
                     {categories.map((category, idx) => (
                         <motion.div
                             key={idx}
@@ -70,20 +90,48 @@ const Services = () => {
                                 <h3 className="text-3xl font-display font-black uppercase mb-4 leading-tight">{category.title}</h3>
                                 <p className="font-sans text-lg font-medium opacity-90">{category.desc}</p>
                             </div>
-                            <div className="p-8 flex-grow">
-                                <ul className="space-y-6">
+                            <div className="p-8 flex-grow bg-white">
+                                <motion.ul
+                                    variants={listVariants}
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true }}
+                                    className="space-y-6"
+                                >
                                     {category.items.map((item, itemIdx) => (
-                                        <li key={itemIdx} className="group">
+                                        <motion.li variants={itemVariants} key={itemIdx} className="group">
                                             <h4 className="text-xl font-bold font-display uppercase tracking-wide group-hover:text-electric-orange transition-colors duration-200">
                                                 {item.name}
                                             </h4>
                                             <p className="font-sans text-base text-gray-800 mt-1">{item.desc}</p>
-                                        </li>
+                                        </motion.li>
                                     ))}
-                                </ul>
+                                </motion.ul>
                             </div>
                         </motion.div>
                     ))}
+                </div>
+
+                {/* FAQ Section with Shadcn Accordion */}
+                <div className="max-w-4xl mx-auto mt-24">
+                    <motion.h3
+                        initial={{ opacity: 0, x: -50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="text-4xl font-display font-black uppercase mb-8 border-b-4 border-electric-orange inline-block pb-2"
+                    >
+                        Common Questions
+                    </motion.h3>
+                    <Accordion type="single" collapsible className="w-full border-4 border-black shadow-neo bg-white">
+                        {faqs.map((faq, i) => (
+                            <AccordionItem key={i} value={`item-${i}`} className={i === faqs.length - 1 ? "border-b-0" : ""}>
+                                <AccordionTrigger>{faq.q}</AccordionTrigger>
+                                <AccordionContent>
+                                    <p className="text-lg leading-relaxed pt-4">{faq.a}</p>
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
                 </div>
             </div>
         </section>

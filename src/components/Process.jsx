@@ -1,7 +1,16 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 const Process = () => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start center", "end center"]
+    });
+
+    const pathLength = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+    const lineWidth = useTransform(pathLength, [0, 1], ["0%", "100%"]);
+
     const steps = [
         {
             num: "01",
@@ -26,9 +35,14 @@ const Process = () => {
     ];
 
     return (
-        <section id="process" className="py-24 bg-acid-yellow border-b-4 border-black relative overflow-hidden">
-            {/* Decorative dashed lines */}
-            <div className="absolute top-1/2 left-0 w-full border-t-4 border-dashed border-black opacity-20 hidden lg:block -z-0"></div>
+        <section ref={ref} id="process" className="py-24 bg-acid-yellow border-b-4 border-black relative overflow-hidden">
+            {/* Scroll Progress Line */}
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-black/10 hidden lg:block -z-0">
+                <motion.div
+                    style={{ width: lineWidth }}
+                    className="h-full bg-black"
+                />
+            </div>
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-20">
@@ -57,9 +71,15 @@ const Process = () => {
                                 {step.num}
                             </div>
 
-                            <div className="w-16 h-16 bg-electric-orange border-4 border-black flex items-center justify-center rounded-full mb-8 shadow-neo-sm relative z-10">
+                            <motion.div
+                                initial={{ scale: 0 }}
+                                whileInView={{ scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ type: "spring", stiffness: 200, delay: 0.2 + (idx * 0.15) }}
+                                className="w-16 h-16 bg-electric-orange border-4 border-black flex items-center justify-center rounded-full mb-8 shadow-neo-sm relative z-10"
+                            >
                                 <span className="font-display font-black text-2xl">{step.num}</span>
-                            </div>
+                            </motion.div>
 
                             <h3 className="text-2xl font-display font-black uppercase mb-4 relative z-10 leading-snug">
                                 {step.title}
