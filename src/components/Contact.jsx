@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import emailjs from '@emailjs/browser';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 const Contact = () => {
@@ -12,19 +11,26 @@ const Contact = () => {
         setIsSubmitting(true);
         setStatus('Sending...');
 
-        // Usually you need specific service_id, template_id, target_form/ref and public_key
-        // For now we simulate or use dummy info.
-        emailjs.sendForm('default_service', 'template_id', e.target, 'public_key')
-            .then(() => {
-                setStatus('success');
-                setIsSubmitting(false);
-                e.target.reset();
-                setTimeout(() => setStatus(''), 5000);
-            }, (error) => {
-                setStatus('error');
-                setIsSubmitting(false);
-                console.error(error.text);
-                setTimeout(() => setStatus(''), 5000);
+        fetch('https://formsubmit.co/ajax/devdecks.team@gmail.com', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: new FormData(e.target)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success === "true" || data.success === true) {
+                    setStatus('Sent successfully! We will contact you soon.');
+                    e.target.reset();
+                } else {
+                    setStatus('Failed to send. Please try again.');
+                    console.error(data);
+                }
+            })
+            .catch(error => {
+                setStatus('Failed to send. Please try again.');
+                console.error(error);
             });
     };
 
