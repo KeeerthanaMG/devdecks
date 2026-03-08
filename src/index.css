@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-off-white text-black font-sans leading-relaxed;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight text-black;
+  }
+}
+
+@layer components {
+  /* Neobrutalist Button Primary */
+  .btn-neo-primary {
+    @apply inline-flex items-center justify-center font-display font-bold text-lg px-8 py-4 border-4 border-black bg-electric-orange text-black transition-all duration-200 active:translate-x-neo-sm active:translate-y-neo-sm active:shadow-none hover:-translate-y-1 shadow-neo;
+  }
+  
+  /* Neobrutalist Button Secondary */
+  .btn-neo-secondary {
+    @apply inline-flex items-center justify-center font-display font-bold text-lg px-8 py-4 border-4 border-black bg-white text-black transition-all duration-200 active:translate-x-neo-sm active:translate-y-neo-sm active:shadow-none hover:-translate-y-1 shadow-neo;
+  }
+
+  /* Neobrutalist Input */
+  .input-neo {
+    @apply w-full border-4 border-black bg-white p-4 font-sans text-lg focus:outline-none focus:ring-4 focus:ring-acid-yellow transition-all shadow-neo-sm;
+  }
+
+  /* Neobrutalist Card */
+  .card-neo {
+    @apply border-4 border-black bg-white shadow-neo transition-all duration-300;
+  }
+}

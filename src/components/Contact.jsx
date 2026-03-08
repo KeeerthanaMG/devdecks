@@ -1,0 +1,164 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
+
+const Contact = () => {
+    const [status, setStatus] = useState('');
+
+    const submitForm = (e) => {
+        e.preventDefault();
+        setStatus('Sending...');
+
+        // Usually you need specific service_id, template_id, target_form/ref and public_key
+        // For now we simulate or use dummy info.
+        emailjs.sendForm('default_service', 'template_id', e.target, 'public_key')
+            .then(() => {
+                setStatus('Sent successfully! We will contact you soon.');
+                e.target.reset();
+            }, (error) => {
+                setStatus('Failed to send. Please try again.');
+                console.error(error.text);
+            });
+    };
+
+    return (
+        <section id="contact" className="py-24 bg-electric-orange border-b-4 border-black relative z-10">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                <div className="text-center mb-16">
+                    <motion.h2
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="text-5xl md:text-6xl font-display font-black uppercase text-black mb-4 inline-block bg-white px-8 py-4 border-4 border-black shadow-neo"
+                    >
+                        Start Your Project
+                    </motion.h2>
+                    <p className="text-2xl font-sans font-bold text-black bg-acid-yellow inline-block px-4 py-2 border-4 border-black shadow-neo-sm transform rotate-1 mt-4">
+                        Tell us what you're looking to build.
+                    </p>
+                </div>
+
+                <motion.form
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    onSubmit={submitForm}
+                    className="card-neo bg-off-white p-8 md:p-12 space-y-8"
+                >
+                    {/* Services & Project Type */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            <label className="block text-xl font-display font-bold uppercase tracking-wider">Service Needed</label>
+                            <select name="service" required className="input-neo appearance-none rounded-none cursor-pointer border-4 border-black font-sans font-medium hover:bg-gray-50 focus:bg-acid-yellow shadow-neo-sm">
+                                <option value="" disabled selected>Select a Service</option>
+                                <option>Business Website</option>
+                                <option>Startup Landing Page</option>
+                                <option>Web Application</option>
+                                <option>MVP Development</option>
+                                <option>Website Redesign</option>
+                                <option>Social Media Branding</option>
+                                <option>LinkedIn Optimization</option>
+                                <option>Academic Project</option>
+                                <option>Consultation</option>
+                            </select>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="block text-xl font-display font-bold uppercase tracking-wider">Project Type</label>
+                            <select name="project_type" required className="input-neo appearance-none rounded-none cursor-pointer border-4 border-black font-sans font-medium hover:bg-gray-50 focus:bg-acid-yellow shadow-neo-sm">
+                                <option value="" disabled selected>Select Type</option>
+                                <option>New Project</option>
+                                <option>Improve Existing Product</option>
+                                <option>Prototype / MVP</option>
+                                <option>Consultation</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Budget & Timeline */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            <label className="block text-xl font-display font-bold uppercase tracking-wider">Budget Range</label>
+                            <select name="budget" required className="input-neo appearance-none rounded-none cursor-pointer border-4 border-black font-sans font-medium hover:bg-gray-50 focus:bg-acid-yellow shadow-neo-sm">
+                                <option value="" disabled selected>Select Budget</option>
+                                <option>Under ₹10K</option>
+                                <option>₹10K – ₹25K</option>
+                                <option>₹25K – ₹50K</option>
+                                <option>₹50K+</option>
+                            </select>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="block text-xl font-display font-bold uppercase tracking-wider">Timeline</label>
+                            <select name="timeline" required className="input-neo appearance-none rounded-none cursor-pointer border-4 border-black font-sans font-medium hover:bg-gray-50 focus:bg-acid-yellow shadow-neo-sm">
+                                <option value="" disabled selected>Select Timeline</option>
+                                <option>ASAP</option>
+                                <option>1-2 Weeks</option>
+                                <option>1 Month</option>
+                                <option>Flexible</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Scheduling */}
+                    <div className="bg-white p-6 border-4 border-black shadow-neo-sm space-y-6">
+                        <h3 className="text-2xl font-display font-bold uppercase border-b-4 border-black pb-2 inline-block">Call Scheduling</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                            <div className="space-y-4">
+                                <label className="block text-lg font-display font-bold uppercase tracking-wide">Select Date</label>
+                                <input type="date" name="call_date" required className="input-neo rounded-none cursor-pointer border-4 border-black focus:bg-acid-yellow font-sans font-medium" />
+                            </div>
+
+                            <div className="space-y-4">
+                                <label className="block text-lg font-display font-bold uppercase tracking-wide">Available Times</label>
+                                <select name="call_time" required className="input-neo appearance-none rounded-none cursor-pointer border-4 border-black focus:bg-acid-yellow font-sans font-medium">
+                                    <option value="" disabled selected>Select Time</option>
+                                    <optgroup label="Weekdays">
+                                        <option>7:00 PM</option>
+                                        <option>8:00 PM</option>
+                                        <option>9:00 PM</option>
+                                        <option>10:00 PM</option>
+                                    </optgroup>
+                                    <optgroup label="Weekends (9 AM - 10 PM)">
+                                        <option>9:00 AM</option>
+                                        <option>12:00 PM</option>
+                                        <option>3:00 PM</option>
+                                        <option>6:00 PM</option>
+                                        <option>9:00 PM</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Contact Fields */}
+                    <div className="space-y-6">
+                        <h3 className="text-2xl font-display font-bold uppercase border-b-4 border-black pb-2 inline-block">Your Details</h3>
+                        <div className="grid grid-cols-1 gap-6">
+                            <input type="text" name="user_name" placeholder="Full Name" required className="input-neo border-4 border-black rounded-none focus:bg-acid-yellow font-sans font-medium" />
+                            <input type="email" name="user_email" placeholder="Email Address" required className="input-neo border-4 border-black rounded-none focus:bg-acid-yellow font-sans font-medium" />
+                            <input type="tel" name="user_phone" placeholder="Phone Number (Optional)" className="input-neo border-4 border-black rounded-none focus:bg-acid-yellow font-sans font-medium" />
+                        </div>
+                    </div>
+
+                    {/* Status Message */}
+                    {status && (
+                        <div className="p-4 border-4 border-black bg-acid-yellow text-black font-bold font-sans uppercase">
+                            {status}
+                        </div>
+                    )}
+
+                    {/* Submit */}
+                    <div className="pt-4">
+                        <button type="submit" className="btn-neo-primary w-full bg-black text-white hover:bg-electric-orange hover:text-black py-5 text-2xl uppercase tracking-widest active:translate-y-neo-sm active:translate-x-neo-sm active:shadow-none hover:shadow-neo hover:-translate-y-1">
+                            Start My Project
+                        </button>
+                    </div>
+                </motion.form>
+            </div>
+        </section>
+    );
+};
+
+export default Contact;
