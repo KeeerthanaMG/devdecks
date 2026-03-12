@@ -9,7 +9,7 @@ const Contact = () => {
     const submitForm = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        setStatus('Sending...');
+        setStatus('sending');
 
         fetch('https://formsubmit.co/ajax/devdecks.team@gmail.com', {
             method: 'POST',
@@ -21,15 +21,17 @@ const Contact = () => {
             .then(response => response.json())
             .then(data => {
                 if (data.success === "true" || data.success === true) {
-                    setStatus('Sent successfully! We will contact you soon.');
+                    setStatus('success');
                     e.target.reset();
                 } else {
-                    setStatus('Failed to send. Please try again.');
+                    setStatus('error');
                     console.error(data);
                 }
+                setIsSubmitting(false);
             })
             .catch(error => {
-                setStatus('Failed to send. Please try again.');
+                setStatus('error');
+                setIsSubmitting(false);
                 console.error(error);
             });
     };
@@ -206,7 +208,7 @@ const Contact = () => {
                             disabled={isSubmitting}
                             className={`btn-neo-primary w-full bg-black text-white hover:bg-electric-orange hover:text-black py-5 text-2xl uppercase tracking-widest active:translate-y-neo-sm active:translate-x-neo-sm active:shadow-none hover:shadow-neo hover:-translate-y-1 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
                         >
-                            {status === 'Sending...' ? 'Sending Request...' : 'Start My Project'}
+                            {status === 'sending' ? 'Sending Request...' : 'Start My Project'}
                         </motion.button>
                     </div>
                 </motion.form>
